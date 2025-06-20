@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mermaid Diagram Editor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="editor-panel">
+            <div class="editor-header">
+                <div class="editor-title">📝 Editor</div>
+                <button class="btn btn-small" onclick="renderDiagram()">Render</button>
+            </div>
+            <textarea id="mermaidCode" placeholder="Enter your Mermaid diagram code here...
+
+Example:
+flowchart TD
+    A[Start] --> B{Is it working?}
+    B -->|Yes| C[Great!]
+    B -->|No| D[Debug]
+    D --> B">flowchart TD
+    A[Start] --> B{Is it working?}
+    B -->|Yes| C[Great!]
+    B -->|No| D[Debug]
+    D --> B</textarea>
+        </div>
+
+        <div class="viewer-panel">
+            <div class="viewer-header">
+                <div class="viewer-title">🎨 Preview</div>
+                <div class="controls">
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" onclick="zoomIn()" title="Zoom In">🔍+</button>
+                        <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out">🔍-</button>
+                        <button class="zoom-btn" onclick="resetZoom()" title="Reset Zoom">⌂</button>
+                    </div>
+                    <button class="btn btn-small" onclick="exportPNG()">📥 Export PNG</button>
+                </div>
+            </div>
+            
+            <div id="diagramContainer">
+                <div id="mermaidDiagram">
+                    <div class="placeholder">Your diagram will appear here</div>
+                </div>
+            </div>
+            
+            <div id="status" class="status"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
