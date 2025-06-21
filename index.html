@@ -10,11 +10,12 @@
 <body>
     <div class="container">
         <div class="editor-panel">
-            <div class="editor-header">
-                <div class="editor-title">📝 Editor</div>
-                <button class="btn btn-small" onclick="renderDiagram()">Render</button>
-            </div>
-            <textarea id="mermaidCode" placeholder="Enter your Mermaid diagram code here...
+            <div class="editor-container">
+                <div class="editor-controls-overlay">
+                    <button class="editor-icon-btn" onclick="copyText()" title="Copy text">⧉</button>
+                    <button class="editor-icon-btn" onclick="clearText()" title="Clear text">×</button>
+                </div>
+                <textarea id="mermaidCode" placeholder="Enter your Mermaid diagram code here...
 
 Example:
 flowchart TD
@@ -26,22 +27,19 @@ flowchart TD
     B -->|Yes| C[Great!]
     B -->|No| D[Debug]
     D --> B</textarea>
+            </div>
         </div>
 
         <div class="viewer-panel">
-            <div class="viewer-header">
-                <div class="viewer-title">🎨 Preview</div>
-                <div class="controls">
+            <div id="diagramContainer">
+                <div class="controls-overlay">
                     <div class="zoom-controls">
                         <button class="zoom-btn" onclick="zoomIn()" title="Zoom In">🔍+</button>
                         <button class="zoom-btn" onclick="zoomOut()" title="Zoom Out">🔍-</button>
                         <button class="zoom-btn" onclick="resetZoom()" title="Reset Zoom">⌂</button>
                     </div>
-                    <button class="btn btn-small" onclick="exportPNG()">📥 Export PNG</button>
+                    <button class="zoom-btn" onclick="exportPNG()" title="Export PNG">⤴️</button>
                 </div>
-            </div>
-            
-            <div id="diagramContainer">
                 <div id="mermaidDiagram">
                     <div class="placeholder">Your diagram will appear here</div>
                 </div>

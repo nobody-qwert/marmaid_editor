@@ -57,7 +57,7 @@ async function renderDiagram() {
         // Insert the SVG
         diagramDiv.innerHTML = svg;
         
-        // Initialize zoom and pan
+        // Initialize zoom and pan with auto-scaling
         initializeZoomPan();
         
         showStatus('✅ Diagram rendered successfully!');
@@ -75,8 +75,8 @@ function initializeZoomPan() {
     
     if (!svg) return;
     
-    // Reset transform
-    resetZoom();
+    // Auto-scale to fit container
+    autoScaleToFit();
     
     // Add wheel event for zooming
     container.addEventListener('wheel', handleWheel, { passive: false });
@@ -90,6 +90,35 @@ function initializeZoomPan() {
     svg.addEventListener('touchstart', handleTouchStart, { passive: false });
     document.addEventListener('touchmove', handleTouchMove, { passive: false });
     document.addEventListener('touchend', handleTouchEnd);
+}
+
+function autoScaleToFit() {
+    const svg = document.querySelector('#mermaidDiagram svg');
+    const container = document.getElementById('diagramContainer');
+    
+    if (!svg || !container) return;
+    
+    try {
+        // Get SVG dimensions
+        const svgRect = svg.getBBox();
+        const containerRect = container.getBoundingClientRect();
+        
+        // Calculate scale to fit with some padding
+        const padding = 40;
+        const scaleX = (containerRect.width - padding) / svgRect.width;
+        const scaleY = (containerRect.height - padding) / svgRect.height;
+        const scale = Math.min(scaleX, scaleY, 1); // Don't scale up beyond 100%
+        
+        // Set initial zoom and center
+        currentZoom = scale;
+        currentX = 0;
+        currentY = 0;
+        
+        updateTransform();
+    } catch (error) {
+        // Fallback to reset zoom if auto-scaling fails
+        resetZoom();
+    }
 }
 
 function handleWheel(e) {
@@ -162,10 +191,7 @@ function zoomOut() {
 }
 
 function resetZoom() {
-    currentZoom = 1;
-    currentX = 0;
-    currentY = 0;
-    updateTransform();
+    autoScaleToFit();
 }
 
 function exportPNG() {
@@ -270,6 +296,65 @@ function exportPNG() {
 
 // Initial render
 renderDiagram();
+
+// Text manipulation functions
+function copyText() {
+    const textarea = document.getElementById('mermaidCode');
+    textarea.select();
+    textarea.setSelectionRange(0, 99999);
+    
+    try {
+        navigator.clipboard.writeText(textarea.value).then(() => {
+            showStatus('📋 Text copied to clipboard!');
+        }).catch(() => {
+            document.execCommand('copy');
+            showStatus('📋 Text copied to clipboard!');
+        });
+    } catch (error) {
+        showStatus('❌ Failed to copy text', true);
+    }
+}
+
+async function pasteText() {
+    const textarea = document.getElementById('mermaidCode');
+    
+    try {
+        // Try direct clipboard access
+        const text = await navigator.clipboard.readText();
+        textarea.value = text;
+        textarea.focus();
+        renderDiagram();
+        showStatus('📥 Text pasted from clipboard!');
+    } catch (error) {
+        // If denied, try to request permission and retry
+        try {
+            await navigator.permissions.query({ name: 'clipboard-read' });
+            const text = await navigator.clipboard.readText();
+            textarea.value = text;
+            textarea.focus();
+            renderDiagram();
+            showStatus('📥 Text pasted from clipboard!');
+        } catch (permError) {
+            // Final fallback: simulate Ctrl+V programmatically
+            textarea.focus();
+            textarea.select();
+            if (document.execCommand('paste')) {
+                renderDiagram();
+                showStatus('📥 Text pasted!');
+            } else {
+                showStatus('Click here then press Ctrl+V', false);
+            }
+        }
+    }
+}
+
+function clearText() {
+    const textarea = document.getElementById('mermaidCode');
+    textarea.value = '';
+    textarea.focus();
+    renderDiagram();
+    showStatus('🗑️ Text cleared!');
+}
 
 // Handle keyboard shortcuts
 document.addEventListener('keydown', function(e) {

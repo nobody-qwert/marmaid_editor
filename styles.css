@@ -26,7 +26,7 @@ body {
     border-radius: 16px;
     backdrop-filter: blur(10px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
 }
@@ -37,7 +37,7 @@ body {
     border-radius: 16px;
     backdrop-filter: blur(10px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -56,17 +56,47 @@ h1 {
     background-clip: text;
 }
 
-.editor-header {
+.editor-container {
+    flex: 1;
+    position: relative;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+    flex-direction: column;
 }
 
-.editor-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #4a5568;
+.editor-controls-overlay {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    gap: 0.25rem;
+    z-index: 10;
+    align-items: center;
+}
+
+.editor-icon-btn {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.4rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+}
+
+.editor-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-1px);
+}
+
+.editor-icon-btn:active {
+    transform: translateY(0);
 }
 
 .btn {
@@ -95,6 +125,18 @@ h1 {
     font-size: 0.9rem;
 }
 
+.controls-overlay .btn {
+    background: rgba(102, 126, 234, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    box-shadow: none;
+}
+
+.controls-overlay .btn:hover {
+    background: rgba(102, 126, 234, 0.2);
+    border-color: rgba(102, 126, 234, 0.4);
+}
+
 #mermaidCode {
     flex: 1;
     border: 2px solid #e2e8f0;
@@ -118,30 +160,24 @@ h1 {
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.viewer-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.viewer-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #4a5568;
-}
-
-.controls {
+.controls-overlay {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
     display: flex;
     gap: 0.5rem;
+    z-index: 10;
+    align-items: center;
 }
 
 .zoom-controls {
     display: flex;
     gap: 0.25rem;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
     border-radius: 8px;
     padding: 0.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .zoom-btn {
@@ -168,6 +204,7 @@ h1 {
     justify-content: center;
     overflow: hidden;
     position: relative;
+    margin: 0;
 }
 
 #mermaidDiagram {
@@ -177,8 +214,9 @@ h1 {
 
 .status {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
     background: rgba(34, 197, 94, 0.9);
     color: white;
     padding: 0.5rem 1rem;
@@ -186,13 +224,12 @@ h1 {
     font-size: 0.8rem;
     font-weight: 500;
     opacity: 0;
-    transform: translateY(-20px);
     transition: all 0.3s ease;
 }
 
 .status.show {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
 }
 
 .status.error {
