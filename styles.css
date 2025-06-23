@@ -170,28 +170,31 @@ h1 {
     align-items: center;
 }
 
-.zoom-controls {
-    display: flex;
-    gap: 0.25rem;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 8px;
-    padding: 0.25rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
 
 .zoom-btn {
-    background: transparent;
-    border: none;
-    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.4rem;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
-    font-size: 16px;
+    font-size: 28px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
 }
 
 .zoom-btn:hover {
-    background: rgba(102, 126, 234, 0.1);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-1px);
+}
+
+.zoom-btn:active {
+    transform: translateY(0);
 }
 
 #diagramContainer {
