@@ -232,9 +232,8 @@ function exportPNG() {
         canvas.height = height * scale;
         ctx.scale(scale, scale);
         
-        // Create image from SVG
-        const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-        const url = URL.createObjectURL(svgBlob);
+        // Create data URI from SVG (avoids cross-origin taint)
+        const svgDataUri = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
         
         const img = new Image();
         img.onload = function() {
@@ -257,24 +256,20 @@ function exportPNG() {
                 link.click();
                 document.body.removeChild(link);
                 
-                // Cleanup
-                URL.revokeObjectURL(url);
                 showStatus('📥 PNG exported successfully!');
                 
             } catch (drawError) {
                 console.error('Drawing error:', drawError);
-                URL.revokeObjectURL(url);
                 showStatus('❌ Error drawing PNG', true);
             }
         };
         
         img.onerror = function(imgError) {
             console.error('Image load error:', imgError);
-            URL.revokeObjectURL(url);
             showStatus('❌ Error loading SVG for export', true);
         };
         
-        img.src = url;
+        img.src = svgDataUri;
         
     } catch (error) {
         console.error('Export error:', error);
